@@ -34,3 +34,11 @@ Or directly from ACM: https://dl.acm.org/citation.cfm?id=178249
 
 T. Granlund, and P. L. Montgomery, "Division by invariant integers using
 multiplication," ACM SIGPLAN Notices, vol. 29, no. 6, pp. 61-72, 1994.
+
+Also, a more recent paper could be interesting:
+https://gmplib.org/~tege/division-paper.pdf
+
+Or directly from IEEE: http://ieeexplore.ieee.org/abstract/document/5487506/
+
+N. Moller, and T. Granlund, "Improved division by invariant integers," IEEE
+Transactions on Computers, vol. 60, no. 2, pp. 165--175, 2011.
