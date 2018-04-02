@@ -27,7 +27,7 @@ divisor must actually fit into int32\_t, so highest bit must be zero.
 
 # References
 
-For the academic paper refernce, see:
+For the academic paper reference, see:
 https://gmplib.org/~tege/divcnst-pldi94.pdf
 
 Or directly from ACM: https://dl.acm.org/citation.cfm?id=178249
