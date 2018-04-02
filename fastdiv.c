@@ -58,7 +58,6 @@ static inline uint32_t fastdiv(struct fastdivctx *ctx, uint32_t eax)
 {
   uint64_t edxeax = ((uint64_t)eax) * ctx->mult;
   uint32_t edx = edxeax>>32;
-  uint32_t eaxorig = eax;
   eax -= edx;
   eax >>= (ctx->shift1);
   eax += edx;
