@@ -20,7 +20,7 @@ uint8_t ilog(uint32_t i)
   return result;
 }
 
-void init_fastdivctx(struct fastdivctx *ctx, uint32_t divisor)
+static inline void init_fastdivctx(struct fastdivctx *ctx, uint32_t divisor)
 {
   uint8_t ilogd = ilog(divisor);
   int power_of_2 = (divisor & (divisor - 1)) == 0;
@@ -41,7 +41,7 @@ void init_fastdivctx(struct fastdivctx *ctx, uint32_t divisor)
   ctx->mult = (1ULL<<(32+ctx->shift1+ctx->shift2)) / divisor + 1;
 }
 
-uint32_t fastmod(struct fastdivctx *ctx, uint32_t eax)
+static inline uint32_t fastmod(struct fastdivctx *ctx, uint32_t eax)
 {
   uint64_t edxeax = ((uint64_t)eax) * ctx->mult;
   uint32_t edx = edxeax>>32;
@@ -54,7 +54,7 @@ uint32_t fastmod(struct fastdivctx *ctx, uint32_t eax)
   return eaxorig - edx;
 }
 
-uint32_t fastdiv(struct fastdivctx *ctx, uint32_t eax)
+static inline uint32_t fastdiv(struct fastdivctx *ctx, uint32_t eax)
 {
   uint64_t edxeax = ((uint64_t)eax) * ctx->mult;
   uint32_t edx = edxeax>>32;
