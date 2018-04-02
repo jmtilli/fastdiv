@@ -24,3 +24,13 @@ fast generation of random numbers from an uniform integer distribution.
 
 Note that currently only uint32\_t by uint32\_t division is supported, and the
 divisor must actually fit into int32\_t, so highest bit must be zero.
+
+# References
+
+For the academic paper refernce, see:
+https://gmplib.org/~tege/divcnst-pldi94.pdf
+
+Or directly from ACM: https://dl.acm.org/citation.cfm?id=178249
+
+T. Granlund, and P. L. Montgomery, "Division by invariant integers using
+multiplication," ACM SIGPLAN Notices, vol. 29, no. 6, pp. 61-72, 1994.
