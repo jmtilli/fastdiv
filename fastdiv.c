@@ -65,6 +65,21 @@ static inline uint32_t fastdiv(struct fastdivctx *ctx, uint32_t eax)
   return eax;
 }
 
+static inline void fastdivmod(struct fastdivctx *ctx, uint32_t eax,
+                              uint32_t *div, uint32_t *mod)
+{
+  uint64_t edxeax = ((uint64_t)eax) * ctx->mult;
+  uint32_t edx = edxeax>>32;
+  uint32_t eaxorig = eax;
+  eax -= edx;
+  eax >>= (ctx->shift1);
+  eax += edx;
+  eax >>= (ctx->shift2);
+  *div = eax;
+  edx = ctx->mod*eax;
+  *mod = eaxorig - edx;
+}
+
 int main(int argc, char **argv)
 {
   struct fastdivctx ctx;
@@ -240,6 +255,64 @@ int main(int argc, char **argv)
   }
   gettimeofday(&tv2, NULL);
   printf("direct div: %g nsec\n", tv2.tv_sec - tv1.tv_sec + (tv2.tv_usec-tv1.tv_usec)/1e6);
+
+  gettimeofday(&tv1, NULL);
+  for (i = 0; i < 1000*1000*1000/4; i++)
+  {
+    volatile uint32_t x = i + 1;
+    uint32_t div, mod;
+    fastdivmod(&ctx, x, &div, &mod);
+    if (mod == d || div == x)
+    {
+      printf("1\n");
+      abort();
+    }
+    fastdivmod(&ctx, x, &div, &mod);
+    if (mod == d || div == x)
+    {
+      printf("2\n");
+      abort();
+    }
+    fastdivmod(&ctx, x, &div, &mod);
+    if (mod == d || div == x)
+    {
+      printf("3\n");
+      abort();
+    }
+    fastdivmod(&ctx, x, &div, &mod);
+    if (mod == d || div == x)
+    {
+      printf("4\n");
+      abort();
+    }
+  }
+  gettimeofday(&tv2, NULL);
+  printf("fast divmod: %g nsec\n", tv2.tv_sec - tv1.tv_sec + (tv2.tv_usec-tv1.tv_usec)/1e6);
+
+  gettimeofday(&tv1, NULL);
+  for (i = 0; i < 1000*1000*1000/4; i++)
+  {
+    volatile uint32_t x = i + 1;
+    if (x / d == x || x % d == d)
+    {
+      abort();
+    }
+    if (x / d == x || x % d == d)
+    {
+      abort();
+    }
+    if (x / d == x || x % d == d)
+    {
+      abort();
+    }
+    if (x / d == x || x % d == d)
+    {
+      abort();
+    }
+  }
+  gettimeofday(&tv2, NULL);
+  printf("direct divmod: %g nsec\n", tv2.tv_sec - tv1.tv_sec + (tv2.tv_usec-tv1.tv_usec)/1e6);
+
   gettimeofday(&tv1, NULL);
   for (i = 0; i < 1000*1000*1000/4; i++)
   {
