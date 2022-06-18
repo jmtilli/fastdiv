@@ -1,0 +1,5 @@
+/.stir.db
+/fastdiv
+*.o
+*.d
+*.a

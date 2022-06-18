@@ -25,6 +25,17 @@ fast generation of random numbers from an uniform integer distribution.
 Note that currently only uint32\_t by uint32\_t division is supported, and the
 divisor must actually fit into int32\_t, so highest bit must be zero.
 
+# Directory structure
+
+If you want to just look at the simplest possible fast division code, you may
+look at the file fastdiv.c in the root directory. However, the code is also
+available as a library, built using stirmake
+(https://github.com/Aalto5G/stirmake). The lib directory contains the library
+and the examples directory contains how to use that library. Integration with
+external build systems using stirmake is optimal; integration with external
+build systems using make is possible by calling stirmake as a sub-make but then
+the benefits of stirmake are lost.
+
 # References
 
 For the academic paper reference, see:

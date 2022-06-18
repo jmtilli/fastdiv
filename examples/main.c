@@ -1,84 +1,7 @@
-#include <stdlib.h>
-#include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/time.h>
-
-struct fastdivctx {
-  uint32_t mult;
-  uint32_t mod;
-  uint8_t shift1:1;
-  uint8_t shift2:7;
-};
-
-static inline uint8_t ilog(uint32_t i)
-{
-  uint8_t result = 0;
-  while (i >>= 1)
-  {
-    result++;
-  }
-  return result;
-}
-
-static inline void init_fastdivctx(struct fastdivctx *ctx, uint32_t divisor)
-{
-  uint8_t ilogd = ilog(divisor);
-  int power_of_2 = (divisor & (divisor - 1)) == 0;
-  if (divisor == 0 || divisor >= (1U<<31))
-  {
-    abort(); // Not supported
-  }
-  if (power_of_2)
-  {
-    ctx->shift1 = 0;
-  }
-  else
-  {
-    ctx->shift1 = 1;
-  }
-  ctx->shift2 = ilogd;
-  ctx->mod = divisor;
-  ctx->mult = (1ULL<<(32+ctx->shift1+ctx->shift2)) / divisor + 1;
-}
-
-static inline uint32_t fastmod(struct fastdivctx *ctx, uint32_t eax)
-{
-  uint64_t edxeax = ((uint64_t)eax) * ctx->mult;
-  uint32_t edx = edxeax>>32;
-  uint32_t eaxorig = eax;
-  eax -= edx;
-  eax >>= (ctx->shift1);
-  eax += edx;
-  eax >>= (ctx->shift2);
-  edx = ctx->mod*eax;
-  return eaxorig - edx;
-}
-
-static inline uint32_t fastdiv(struct fastdivctx *ctx, uint32_t eax)
-{
-  uint64_t edxeax = ((uint64_t)eax) * ctx->mult;
-  uint32_t edx = edxeax>>32;
-  eax -= edx;
-  eax >>= (ctx->shift1);
-  eax += edx;
-  eax >>= (ctx->shift2);
-  return eax;
-}
-
-static inline void fastdivmod(struct fastdivctx *ctx, uint32_t eax,
-                              uint32_t *div, uint32_t *mod)
-{
-  uint64_t edxeax = ((uint64_t)eax) * ctx->mult;
-  uint32_t edx = edxeax>>32;
-  uint32_t eaxorig = eax;
-  eax -= edx;
-  eax >>= (ctx->shift1);
-  eax += edx;
-  eax >>= (ctx->shift2);
-  *div = eax;
-  edx = ctx->mod*eax;
-  *mod = eaxorig - edx;
-}
+#include "fastdivhdr.h"
 
 int main(int argc, char **argv)
 {
@@ -208,7 +131,7 @@ int main(int argc, char **argv)
   gettimeofday(&tv1, NULL);
   for (i = 0; i < 1000*1000*1000/4; i++)
   {
-    volatile uint32_t x = ((uint32_t)i) + 1;
+    volatile uint32_t x = (uint32_t)i + 1;
     if (fastdiv(&ctx, x) == x)
     {
       abort();
@@ -235,7 +158,7 @@ int main(int argc, char **argv)
   gettimeofday(&tv1, NULL);
   for (i = 0; i < 1000*1000*1000/4; i++)
   {
-    volatile uint32_t x = ((uint32_t)i) + 1;
+    volatile uint32_t x = (uint32_t)i + 1;
     if (x / d == x)
     {
       abort();
@@ -259,7 +182,7 @@ int main(int argc, char **argv)
   gettimeofday(&tv1, NULL);
   for (i = 0; i < 1000*1000*1000/4; i++)
   {
-    volatile uint32_t x = ((uint32_t)i) + 1;
+    volatile uint32_t x = (uint32_t)i + 1;
     uint32_t div, mod;
     fastdivmod(&ctx, x, &div, &mod);
     if (mod == d || div == x)
@@ -292,7 +215,7 @@ int main(int argc, char **argv)
   gettimeofday(&tv1, NULL);
   for (i = 0; i < 1000*1000*1000/4; i++)
   {
-    volatile uint32_t x = ((uint32_t)i) + 1;
+    volatile uint32_t x = (uint32_t)i + 1;
     if (x / d == x || x % d == d)
     {
       abort();

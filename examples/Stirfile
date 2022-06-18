@@ -1,0 +1,18 @@
+@subfile
+@strict
+
+# You can modify these
+$SRC_LIB = []
+$SRC_PROG = ["main.c"]
+$LIB = "libexamples.a"
+$EXTRACFLAGS = ["-I../lib"]
+$CFLAGS = [@$CFLAGS, @$EXTRACFLAGS]
+$LIBS = ["../lib/libfastdiv.a"]
+$UNITDEPS = []
+$UNITCMDS = [["./main"]]
+
+# You won't want to modify anything below this line
+@call $MODULE($LIB, $SRC_LIB, $SRC_PROG, $LIBS, $UNITDEPS, $UNITCMDS)
+
+@cdepincludes @autophony @autotarget @ignore \
+  @sufsuball([@$SRC_PROG, @$SRC_LIB], ".c", ".d")
