@@ -11,8 +11,19 @@ $LIBS = []
 $UNITDEPS = []
 $UNITCMDS = []
 
+$LDFLAGS_DYN = []
+
 # You won't want to modify anything below this line
 @call $MODULE($LIB, $SRC_LIB, $SRC_PROG, $LIBS, $UNITDEPS, $UNITCMDS)
+
+@deponly: 'all': 'libfastdiv.so' 'libfastdiv.so.1'
+
+'libfastdiv.so': $LIB
+@	[$(CC), "-shared", "-fPIC", "-o", $@, "-Wl,--whole-archive", @@suffilter($^, ".a"), "-Wl,--no-whole-archive", @$(LDFLAGS_DYN), "-lc"]
+
+'libfastdiv.so.1': 'libfastdiv.so'
+@	["rm", "-f", $@]
+@	["ln", "-s", $<, $@]
 
 @cdepincludes @autophony @autotarget @ignore \
   @sufsuball([@$SRC_PROG, @$SRC_LIB], ".c", ".d")
