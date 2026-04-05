@@ -55,8 +55,8 @@ $MODS = ["lib", "examples"]
                        @@L$LIST_TO_DICTS_SIMPLE($libs, "name")], \
               "shells": [{"cmd": [ \
                           @D$(CC), @@D$(CFLAGS), "-o", $prog[$i], \
-                          $obj_prog[$i], $lib, @$libs, @@D$(LDFLAGS), \
-                          "-lpthread", "-ldl"]}]})
+                          $obj_prog[$i], $lib, @$libs, @@D$(LDFLAGS) \
+                          ]}]})
   @endfor
   @addrule({"tgts": [{"name": $lib}], \
             "deps": @L$LIST_TO_DICTS_SIMPLE($obj_lib, "name"), \
