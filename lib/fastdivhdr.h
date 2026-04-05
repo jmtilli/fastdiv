@@ -1,5 +1,5 @@
-#ifndef _FASTLIBHDR_H_
-#define _FASTLIBHDR_H_
+#ifndef _FASTDIVHDR_H_
+#define _FASTDIVHDR_H_
 
 #include <stdint.h>
 
