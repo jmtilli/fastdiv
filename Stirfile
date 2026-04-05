@@ -5,7 +5,7 @@
 
 # You can modify these for compilation
 $CC ?= "cc"
-$CFLAGS ?= ["-g", "-O2", "-Wall", "-Wextra", "-Wsign-conversion", "-Wno-missing-field-initializers", "-Wno-unused-parameter", "-Wshadow", "-Wstrict-prototypes", "-Wmissing-prototypes", "-Wpointer-arith", "-Werror", "-std=gnu11", "-fPIC"]
+$CFLAGS ?= ["-g", "-O3", "-Wall", "-Wextra", "-Wsign-conversion", "-Wno-missing-field-initializers", "-Wno-unused-parameter", "-Wshadow", "-Wstrict-prototypes", "-Wmissing-prototypes", "-Wpointer-arith", "-Werror", "-std=c99", "-pedantic", "-fPIC"]
 $LDFLAGS ?= []
 
 # You can modify these during development
