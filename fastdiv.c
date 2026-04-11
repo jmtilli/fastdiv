@@ -10,6 +10,36 @@ struct fastdivctx {
   uint8_t shift2:7;
 };
 
+// LLVM 2.6 is first with clang, it supports __has_builtin
+// GCC 3.4 is the first GCC with __has_clz
+#undef FASTDIV_HAS_CLZ
+
+#ifdef __has_builtin
+  #if __has_builtin (__builtin_clz)
+    #define FASTDIV_HAS_CLZ
+  #endif
+#else
+  #ifdef __GNUC__
+    #if __GNUC__ == 3 && __GNUC_MINOR__ >= 4
+      #define FASTDIV_HAS_CLZ
+    #else
+      #if __GNUC__ > 3
+        #define FASTDIV_HAS_CLZ
+      #endif
+    #endif
+  #endif
+#endif
+
+#ifdef FASTDIV_HAS_CLZ
+static inline uint8_t ilog(uint32_t x)
+{
+  if (x == 0)
+  {
+    return 0;
+  }
+  return 31-__builtin_clz(x);
+}
+#else
 static inline uint8_t ilog(uint32_t i)
 {
   uint8_t result = 0;
@@ -19,6 +49,7 @@ static inline uint8_t ilog(uint32_t i)
   }
   return result;
 }
+#endif
 
 static inline void init_fastdivctx(struct fastdivctx *ctx, uint32_t divisor)
 {

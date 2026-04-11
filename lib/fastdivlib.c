@@ -3,19 +3,9 @@
 #include <stdio.h>
 #include "fastdivhdr.h"
 
-static inline uint8_t ilog(uint32_t i)
-{
-  uint8_t result = 0;
-  while (i >>= 1)
-  {
-    result++;
-  }
-  return result;
-}
-
 void init_fastdivctx(struct fastdivctx *ctx, uint32_t divisor)
 {
-  uint8_t ilogd = ilog(divisor);
+  uint8_t ilogd = fastdiv_ilog(divisor);
   int power_of_2 = (divisor & (divisor - 1)) == 0;
   if (divisor == 0 || divisor >= (1U<<31))
   {

@@ -250,5 +250,20 @@ int main(int argc, char **argv)
     abort();
   }
   printf("init: %g nsec\n", tv2.tv_sec - tv1.tv_sec + (tv2.tv_usec-tv1.tv_usec)/1e6);
+
+  gettimeofday(&tv1, NULL);
+  for (i = 0; i < 1000*1000*1000/4; i++)
+  {
+    init_fastdivctx_inline(&ctx, d);
+    init_fastdivctx_inline(&ctx, d);
+    init_fastdivctx_inline(&ctx, d);
+    init_fastdivctx_inline(&ctx, d);
+  }
+  gettimeofday(&tv2, NULL);
+  if (fastmod(&ctx, 0x12345678) == 37)
+  {
+    abort();
+  }
+  printf("init inline: %g nsec\n", tv2.tv_sec - tv1.tv_sec + (tv2.tv_usec-tv1.tv_usec)/1e6);
   return 0;
 }
