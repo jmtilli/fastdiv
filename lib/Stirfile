@@ -18,10 +18,10 @@ $LDFLAGS_DYN = []
 
 @deponly: 'all': 'libfastdiv.so' 'libfastdiv.so.1'
 
-'libfastdiv.so': $LIB
-@	[$(CC), "-shared", "-fPIC", "-o", $@, "-Wl,--whole-archive", @@suffilter($^, ".a"), "-Wl,--no-whole-archive", @$(LDFLAGS_DYN), "-lc"]
+'libfastdiv.so.1': $LIB
+@	[$(CC), "-shared", "-fPIC", "-Wl,-soname,".$@, "-o", $@, "-Wl,--whole-archive", @@suffilter($^, ".a"), "-Wl,--no-whole-archive", @$(LDFLAGS_DYN), "-lc"]
 
-'libfastdiv.so.1': 'libfastdiv.so'
+'libfastdiv.so': 'libfastdiv.so.1'
 @	["rm", "-f", $@]
 @	["ln", "-s", $<, $@]
 
